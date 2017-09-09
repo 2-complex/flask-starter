@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{%block title%}{%endblock%}
+{%block main_content%}
+
+<h1>Square</h1>
+
+<script>
+
+$('#body_container').append(
+    $('<div>').append(
+        $('<textarea>')
+            .attr('id', 'input')
+            .addClass('form-control')
+            .attr('name', 'letters')
+            .attr('tabindex', 1)
+    ),
+    $('<div>').append(
+        $('<button>')
+            .text('SQUARE')
+            .addClass('square-button')
+            .attr('tabindex', 2 )
+            .click(
+                function(evt)
+                {
+                    $('#output').empty();
+
+                    $.when( $.ajax({
+                        type: "POST",
+                        url: "/square",
+                        dataType: "text",
+                        data: {"number":$('#input').val()},
+                    }) ).then(
+                        function(result)
+                        {
+                            var answerInfo = JSON.parse(result);
+                            $('#output').append(
+                                $('<div>')
+                                    .attr('id', 'output')
+                                    .addClass('form-control')
+                                    .html(answerInfo.answer)
+                            )
+                        }
+                    );
+                }
+            ),
+        $('<div>')
+            .attr('id', 'output')
+            .addClass('form-control')
+            .attr('name', 'words')
+            .attr('tabindex', 3)
+    )
+)
+
+</script>
+
+{%endblock%}
